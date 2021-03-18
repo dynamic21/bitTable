@@ -17,5 +17,5 @@ void startTimer()
 
 double stopTimer()
 {
-    return duration_cast<duration<double>>(timer - steady_clock::now()).count();
+    return duration_cast<duration<double>>(steady_clock::now() - timer).count();
 }
