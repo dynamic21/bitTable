@@ -8,7 +8,7 @@ using std::endl;
 class bitTable
 {
 private:
-    int dimensions = 5; // max = 5
+    unsigned int dimensions = 5; // max = 5
     unsigned int length = 0;
     unsigned int rate = 0;
     unsigned int table = 0;
@@ -19,15 +19,17 @@ public:
         dimensions = size;
         length = 1 << dimensions;
         for (int i = 0; i < length; i++)
-        {
-            if (random())
-                table |= 1 << i;
-        }
+            table |= random() << i;
         for (int i = 0; i < 32; i++)
-        {
-            if (random())
-                rate |= 1 << i;
-        }
+            rate |= random() << i;
+    }
+
+    bitTable(bitTable *copyBitTable)
+    {
+        dimensions = copyBitTable->dimensions;
+        length = copyBitTable->length;
+        table = copyBitTable->table;
+        rate = copyBitTable->rate;
     }
 
     bool getTableBit(int index)
@@ -42,9 +44,8 @@ public:
 
     void mutate()
     {
-        rate ^= 1 << random(length);
-        if (rate == 0xffffffff)
-            rate ^= 1 << random(length);
+        rate ^= 1 << random(32);
+        rate ^= rate == 0xffffffff << random(32);
         while (getRateBit(random(32)))
             table ^= 1 << random(length);
     }
@@ -53,17 +54,13 @@ public:
     {
         // cout << "dimensions: " << dimensions << endl;
         // cout << "length: " << length << endl;
-        cout << "rate: ";
-        for (int i = 0; i < 32; i++)
-        {
-            cout << getRateBit(i) << " ";
-        }
-        cout << endl;
+        // cout << "rate: ";
+        // for (int i = 0; i < 32; i++)
+        //     cout << getRateBit(i) << " ";
+        // cout << endl;
         cout << "table: ";
         for (int i = 0; i < length; i++)
-        {
             cout << getTableBit(i) << " ";
-        }
         cout << endl;
     }
 };

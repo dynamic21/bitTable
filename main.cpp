@@ -1,28 +1,49 @@
-#include "bitTable.h"
+#include "bitComponent.h"
 
 int main()
 {
-    int inputSize = 5;
-    bitTable keptBitTable(inputSize);
+    // for (int i = 0; i < 10; i++)
+    // {
+    //     startTimer();
+    //     for (int j = 0; j < 10000000; j++)
+    //     {
+    //         unsigned int num = 0;
+    //         num |= random() << 10;
+    //     }
+    //     cout << "time: " << stopTimer() << endl;
+    // }
+    // bitComponent newBitComponent;
+    // newBitComponent.print();
+    // newBitComponent.mutate();
+    // newBitComponent.print();
+    // newBitComponent.mutate();
+    // newBitComponent.print();
+    // newBitComponent.mutate();
+    // newBitComponent.print();
+    // vector<bool> input = {1, 0};
+    // newBitComponent.evaluateInput(&input);
+    // return 0;
+    int inputSize = 2;
+    bitComponent keptBitComponent;
     while (true)
     {
-        bitTable newBitTable = keptBitTable;
-        newBitTable.mutate();
-        keptBitTable.print();
-        newBitTable.print();
+        bitComponent newBitComponent(&keptBitComponent);
+        newBitComponent.mutate();
+        keptBitComponent.print();
+        newBitComponent.print();
         int keptScore = 0;
         int newScore = 0;
-        for (int i = 0; i < 32; i++)
+        for (int i = 0; i < 4; i++)
         {
-            unsigned int input = 0;
+            vector<bool> input;
             bool output = false;
             // cout << "out: ";
             for (int j = 0; j < inputSize; j++)
             {
                 // bool out = false;
-                if (random())
+                input.push_back(random());
+                if (input[j])
                 {
-                    input |= 1 << j;
                     // out = true;
                     output = !output;
                 }
@@ -31,18 +52,19 @@ int main()
             // cout << endl;
             // cout << "output: " << output << endl;
             // cout << "input: " << input << endl;
-            // cout << "keptBitTable: " << keptBitTable.getTableBit(input) << endl;
-            // cout << "newBitTable: " << newBitTable.getTableBit(input) << endl;
+            // cout << "!!keptBitComponent: " << keptBitComponent.evaluateInput(&input)[0] << endl;
+            // cout << "!!newBitComponent: " << newBitComponent.evaluateInput(&input)[0] << endl;
             // cout << endl;
-            keptScore += output == keptBitTable.getTableBit(input);
-            newScore += output == newBitTable.getTableBit(input);
+            keptScore += output == keptBitComponent.evaluateInput(&input)[0];
+            newScore += output == newBitComponent.evaluateInput(&input)[0];
         }
         cout << "keptBitTable: " << keptScore << endl;
         cout << "newBitTable: " << newScore << endl;
         cout << endl;
         if (newScore > keptScore)
         {
-            keptBitTable = newBitTable;
+            keptBitComponent = newBitComponent;
+            keptBitComponent.print();
         }
     }
 
